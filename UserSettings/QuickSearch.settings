@@ -1,0 +1,55 @@
+trackSelection = false
+fetchPreview = true
+wantsMore = false
+dockable = false
+debug = false
+itemIconSize = 1
+queryFolder = "Assets/Editor/Queries"
+onBoardingDoNotAskAgain = true
+showPackageIndexes = false
+debounceMs = 250
+scopes = {
+	"last_search.0260DB95" = "IMGUI"
+	"asset.0260DB95" = "True"
+	"menu.0260DB95" = "True"
+	"object.0260DB95" = "True"
+	"scene.0260DB95" = "True"
+	"settings.0260DB95" = "True"
+}
+providers = {
+	asset = {
+		active = true
+		priority = 25
+		defaultAction = null
+	}
+	find = {
+		active = true
+		priority = 25
+		defaultAction = null
+	}
+	log = {
+		active = false
+		priority = 210
+		defaultAction = null
+	}
+	object = {
+		active = true
+		priority = 55
+		defaultAction = null
+	}
+	packages = {
+		active = true
+		priority = 90
+		defaultAction = null
+	}
+	scene = {
+		active = true
+		priority = 50
+		defaultAction = null
+	}
+	query = {
+		active = true
+		priority = 100
+		defaultAction = null
+	}
+}

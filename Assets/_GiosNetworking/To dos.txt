@@ -1,0 +1,5 @@
+- Non-local clients
+- Host clients?
+- Jumping and air control
+- Gravity acceleration
+- Physics-based movement?

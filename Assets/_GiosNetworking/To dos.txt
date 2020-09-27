@@ -1,5 +1,7 @@
 - Non-local clients
 - Host clients?
+- Error interpolation
+- Don't sync redundant input
 - Jumping and air control
 - Gravity acceleration
 - Physics-based movement?

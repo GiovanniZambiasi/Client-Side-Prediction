@@ -53,6 +53,12 @@ namespace ClientSidePrediction
             if(!_networkedClient.isServer)
                 _networkedClient.ProcessMovement(__inputData);
         }
+
+        public void SetPhantom(bool isActive)
+        {
+            _showPhantom = isActive;
+            _phantom.SetActive(isActive);
+        }
         
         void UpdatePrediction(uint currentTick,  CharacterStateData latestStateData)
         {

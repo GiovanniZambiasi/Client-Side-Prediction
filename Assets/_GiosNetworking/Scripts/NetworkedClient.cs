@@ -68,6 +68,7 @@ namespace ClientSidePrediction
         Queue<InputData> _inputQueue = new Queue<InputData>(6);
         //List<CharacterStateWithTimestamp> _statesToSend = new List<CharacterStateWithTimestamp>(6);
         CharacterStateData _latestServerState;
+        float _verticalVelocity = 0f;
         float _serverDeltaTime = 0f;
         float _timeSinceLastTick = 0f;
         uint _lastProcessedInput = 0;
@@ -117,7 +118,9 @@ namespace ClientSidePrediction
         {
             var __input = new Vector3(data.input.x, 0f, data.input.y);
             var __movement = Vector3.ClampMagnitude(__input, 1f) * _speed;
-            __movement += Physics.gravity;
+            
+            if(!_characterController.isGrounded)
+                __movement += Physics.gravity;
 
             _characterController.Move(__movement * _serverDeltaTime);
         }
@@ -149,7 +152,6 @@ namespace ClientSidePrediction
             {
                 while (_inputQueue.Count > 0)
                 {
-                    Debug.Log($"Input queue {_inputQueue.Count}");
                     var __input = _inputQueue.Dequeue();
 
                     ProcessMovement(__input);

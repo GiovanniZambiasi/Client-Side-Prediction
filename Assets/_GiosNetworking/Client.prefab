@@ -245,9 +245,7 @@ MonoBehaviour:
   syncInterval: 0.1
   _prediction: {fileID: -4762122087075154557}
   _characterController: {fileID: 1725576858770373524}
-  _mesh: {fileID: 8693213323949103622}
   _speed: 10
-  _artificialLagInSeconds: 0.2
 --- !u!114 &-4762122087075154557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,6 +272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60751abb7d294467a0720f9ec9d005e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _predictiveClient: {fileID: -4762122087075154557}
   _networkedClient: {fileID: 5776767147945164541}
   _characterController: {fileID: 1725576858770373524}
   _rect:
@@ -281,4 +280,4 @@ MonoBehaviour:
     x: 10
     y: 400
     width: 225
-    height: 120
+    height: 220

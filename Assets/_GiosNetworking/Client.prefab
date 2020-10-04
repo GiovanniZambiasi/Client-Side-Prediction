@@ -261,6 +261,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _networkedClient: {fileID: 5776767147945164541}
+  _phantom: {fileID: 2105487166695958639}
 --- !u!114 &5290404675167349142
 MonoBehaviour:
   m_ObjectHideFlags: 0

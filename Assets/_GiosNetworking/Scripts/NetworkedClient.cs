@@ -62,10 +62,8 @@ namespace ClientSidePrediction
         [Header("References")]
         [SerializeField] PredictiveClient _prediction = null;
         [SerializeField] CharacterController _characterController = null;
-        [SerializeField] MeshFilter _mesh = null;
         [Header("Settings")]
         [SerializeField] float _speed = 10f;
-        [SerializeField] float _artificialLagInSeconds = .2f;
 
         Queue<InputData> _inputQueue = new Queue<InputData>(6);
         //List<CharacterStateWithTimestamp> _statesToSend = new List<CharacterStateWithTimestamp>(6);
@@ -74,15 +72,6 @@ namespace ClientSidePrediction
         float _timeSinceLastTick = 0f;
         uint _lastProcessedInput = 0;
         uint _currentTick = 0;
-
-        void OnDrawGizmos()
-        {
-            if (!Application.isPlaying) return;
-
-            Gizmos.color = Color.red;
-
-            Gizmos.DrawWireMesh(_mesh.mesh, _latestServerState.position + Vector3.up);
-        }
 
         void Awake()
         {

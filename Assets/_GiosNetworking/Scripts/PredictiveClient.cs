@@ -8,13 +8,21 @@ namespace ClientSidePrediction
         const int BufferSize = 1024;
         
         [SerializeField] NetworkedClient _networkedClient = null;
+        [SerializeField] GameObject _phantom = null; // Used to display the last synced position from the server
         
         InputData[] _inputBuffer = new InputData[BufferSize];
         CharacterStateData _lastProcessedState = default;
+        bool _showPhantom = false;
 
         void Start()
         {
             Debug.Log($"Start {_networkedClient.hasAuthority}");
+            _showPhantom = _networkedClient.hasAuthority && !_networkedClient.isServer;
+            if (_showPhantom)
+            {
+                _phantom.transform.SetParent(null);
+                _phantom.SetActive(true);
+            }
         }
         
         public void OnTick(uint currentTick)
@@ -48,6 +56,9 @@ namespace ClientSidePrediction
         
         void UpdatePrediction(uint currentTick,  CharacterStateData latestStateData)
         {
+            if(_showPhantom)
+                _phantom.transform.position = latestStateData.position + Vector3.up;
+            
             _lastProcessedState = latestStateData;
             
             _networkedClient.SetState(_lastProcessedState);

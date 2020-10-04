@@ -1,5 +1,5 @@
-- Non-local clients
-- Host clients?
+- Non-local clients *
+- Host clients? *
 - Error interpolation
 - Don't sync redundant input
 - Jumping and air control

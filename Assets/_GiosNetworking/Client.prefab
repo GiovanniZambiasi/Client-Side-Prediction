@@ -275,9 +275,5 @@ MonoBehaviour:
   _predictiveClient: {fileID: -4762122087075154557}
   _networkedClient: {fileID: 5776767147945164541}
   _characterController: {fileID: 1725576858770373524}
-  _rect:
-    serializedVersion: 2
-    x: 10
-    y: 400
-    width: 225
-    height: 220
+  _windowSize: {x: 225, y: 220}
+  _windowViewportPosition: {x: 1, y: 0}

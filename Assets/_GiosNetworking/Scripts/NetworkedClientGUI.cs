@@ -1,4 +1,5 @@
-﻿using Mirror;
+﻿using System.Text;
+using Mirror;
 using UnityEngine;
 
 namespace ClientSidePrediction
@@ -10,18 +11,31 @@ namespace ClientSidePrediction
         [SerializeField] NetworkedClient _networkedClient = null;
         [SerializeField] CharacterController _characterController = null;
         [Header("Settings")]
-        [SerializeField] Rect _rect = new Rect(10, 400, 225, 100);
+        [SerializeField] Vector2Int _windowSize = new Vector2Int(225, 100);
+        [SerializeField] Vector2 _windowViewportPosition = new Vector2(1, 0);
 
+        StringBuilder _sb = new StringBuilder(16);
+        Camera _camera;
         bool _showPhantom = true;
-        
+
         void OnGUI()
         {
             if (!_networkedClient.isClient || !_networkedClient.hasAuthority)
                 return;
-            
-            GUI.Box(_rect, string.Empty);
 
-            GUILayout.BeginArea(_rect);
+            if (_camera == null)
+                _camera = Camera.main;
+            
+            var __screenPoint = _camera.ViewportToScreenPoint(_windowViewportPosition);
+            
+            __screenPoint.x = Mathf.Clamp(__screenPoint.x, 0, Screen.width - _windowSize.x);
+            __screenPoint.y = Mathf.Clamp(__screenPoint.y, 0, Screen.height - _windowSize.y);
+            
+            var __rect = new Rect(__screenPoint, _windowSize);
+            
+            GUI.Box(__rect, string.Empty);
+
+            GUILayout.BeginArea(__rect);
             DrawStats();
             GUILayout.Space(10);
             DrawSettings();
@@ -42,11 +56,10 @@ namespace ClientSidePrediction
         void DrawStats()
         {
             GUILayout.Label("Stats");
-            GUILayout.Label($"Current Tick: {_networkedClient.CurrentTick}");
-            GUILayout.Label($"Server Time: {NetworkTime.time}");
-            GUILayout.Label($"Delta Time: {_networkedClient.ServerDeltaTime}");
-            GUILayout.Label($"Rtt: {NetworkTime.rtt}");
-            GUILayout.Label($"Velocity: {_characterController.velocity}");
+            GUILayout.Label($"Current Tick: {_networkedClient.CurrentTick.ToString()}");
+            GUILayout.Label($"Delta Time: {_networkedClient.ServerDeltaTime.ToString()}");
+            GUILayout.Label($"Rtt: {NetworkTime.rtt.ToString()}");
+            GUILayout.Label($"Velocity: {_characterController.velocity.ToString()}");
         }
     }
 }

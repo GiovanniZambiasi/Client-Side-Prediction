@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ClientSidePrediction
 {
@@ -60,7 +59,7 @@ namespace ClientSidePrediction
             _phantom.SetActive(isActive);
         }
         
-        void UpdatePrediction(uint currentTick,  CharacterStateData latestStateData)
+        void UpdatePrediction(uint currentTick, CharacterStateData latestStateData)
         {
             if(_showPhantom)
                 _phantom.transform.position = latestStateData.position + Vector3.up;
@@ -84,6 +83,5 @@ namespace ClientSidePrediction
                 }
             }
         }
-
     }
 }

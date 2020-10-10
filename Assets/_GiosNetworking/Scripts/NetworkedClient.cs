@@ -9,11 +9,13 @@ namespace ClientSidePrediction
     public struct CharacterStateData: IEquatable<CharacterStateData>
     {
         public Vector3 position;
+        public float verticalVelocity;
         public uint lastProcessedInput;
 
-        public CharacterStateData(Vector3 position, uint lastProcessedInput)
+        public CharacterStateData(Vector3 position, float verticalVelocity, uint lastProcessedInput)
         {
             this.position = position;
+            this.verticalVelocity = verticalVelocity;
             this.lastProcessedInput = lastProcessedInput;
         }
 
@@ -41,18 +43,6 @@ namespace ClientSidePrediction
         }
     }
 
-    public struct CharacterStateWithTimestamp
-    {
-        public CharacterStateData stateData;
-        public float time;
-    }
-    
-    public struct InputDataWithTimestamp
-    {
-        public InputData input;
-        public float time;
-    }
-
     public class NetworkedClient : NetworkBehaviour
     {
         public CharacterStateData LatestServerState => _latestServerState;
@@ -65,10 +55,9 @@ namespace ClientSidePrediction
         [Header("Settings")]
         [SerializeField] float _speed = 10f;
 
-        Queue<InputData> _inputQueue = new Queue<InputData>(6);
-        //List<CharacterStateWithTimestamp> _statesToSend = new List<CharacterStateWithTimestamp>(6);
-        CharacterStateData _latestServerState;
-        float _verticalVelocity = 0f;
+        Queue<InputData> _inputQueue = new Queue<InputData>(6);     // Queue of inputs the server needs to process 
+        CharacterStateData _latestServerState;                              // Latest frame received by the server
+        float _verticalVelocity = 0f; 
         float _serverDeltaTime = 0f;
         float _timeSinceLastTick = 0f;
         uint _lastProcessedInput = 0;
@@ -97,31 +86,20 @@ namespace ClientSidePrediction
 
                 _currentTick++;
             }
-
-            /*var __time = Time.time;
-
-            if (isServer)
-            {
-                for (int __i = _statesToSend.Count - 1; __i >= 0; __i--)
-                {
-                    var __state = _statesToSend[__i];
-                    if (__time - __state.time >= _artificialLagInSeconds)
-                    {
-                        TargetSendState(__state.stateData);
-                        _statesToSend.RemoveAt(__i);
-                    }
-                }
-            }*/
         }
 
         public void ProcessMovement(InputData data)
         {
             var __input = new Vector3(data.input.x, 0f, data.input.y);
             var __movement = Vector3.ClampMagnitude(__input, 1f) * _speed;
-            
-            if(!_characterController.isGrounded)
-                __movement += Physics.gravity;
 
+            if (!_characterController.isGrounded)
+                _verticalVelocity += Physics.gravity.y * _serverDeltaTime;
+            else
+                _verticalVelocity = Physics.gravity.y;
+
+            __movement.y = _verticalVelocity;
+            
             _characterController.Move(__movement * _serverDeltaTime);
         }
 
@@ -129,16 +107,17 @@ namespace ClientSidePrediction
         {
             _characterController.enabled = false;
             _characterController.transform.position = _latestServerState.position;
+            _verticalVelocity = state.verticalVelocity;
             _characterController.enabled = true;
         }
 
-        [Command]
+        [Command(channel = Channels.DefaultUnreliable)]
         public void CmdMove(InputData inputData)
         {
             _inputQueue.Enqueue(inputData);
         }
 
-        [ClientRpc]
+        [ClientRpc(channel = Channels.DefaultUnreliable)]
         public void RpcSendState(CharacterStateData state)
         {
             _latestServerState = state;
@@ -160,7 +139,7 @@ namespace ClientSidePrediction
                 }
             }
 
-            var __position = new CharacterStateData(_characterController.transform.position, _lastProcessedInput);
+            var __position = new CharacterStateData(_characterController.transform.position, _verticalVelocity, _lastProcessedInput);
             
             /*_statesToSend.Insert(0, new CharacterStateWithTimestamp
             {

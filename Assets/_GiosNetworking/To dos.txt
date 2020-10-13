@@ -8,4 +8,4 @@
 - Physics-based movement?
 
 == Issues
-- Players running the simulation under target fps move slower, since they send less input messages/frame 
+- Players running the simulation under target fps move slower, since they send less input messages/frame * 

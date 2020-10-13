@@ -35,11 +35,13 @@ namespace ClientSidePrediction
     {
         public uint tick;
         public Vector2 input;
+        public float deltaTime;
 
-        public InputData(Vector2 input, uint tick)
+        public InputData(Vector2 input, uint tick, float deltaTime)
         {
             this.input = input;
             this.tick = tick;
+            this.deltaTime = deltaTime;
         }
     }
 
@@ -74,10 +76,8 @@ namespace ClientSidePrediction
 
             if (_timeSinceLastTick >= _serverDeltaTime)
             {
-                _timeSinceLastTick -= _serverDeltaTime;
-
                 if (isClient && hasAuthority)
-                    _prediction.OnTick(_currentTick);
+                    _prediction.OnTick(_timeSinceLastTick, _currentTick);
                 else if (!isServer)
                     SetState(_latestServerState);
                 
@@ -85,6 +85,8 @@ namespace ClientSidePrediction
                     ServerOnUpdate();
 
                 _currentTick++;
+                
+                _timeSinceLastTick = 0f;
             }
         }
 
@@ -94,13 +96,13 @@ namespace ClientSidePrediction
             var __movement = Vector3.ClampMagnitude(__input, 1f) * _speed;
 
             if (!_characterController.isGrounded)
-                _verticalVelocity += Physics.gravity.y * _serverDeltaTime;
+                _verticalVelocity += Physics.gravity.y * data.deltaTime;
             else
                 _verticalVelocity = Physics.gravity.y;
 
             __movement.y = _verticalVelocity;
             
-            _characterController.Move(__movement * _serverDeltaTime);
+            _characterController.Move(__movement * data.deltaTime);
         }
 
         public void SetState(CharacterStateData state)
@@ -125,10 +127,10 @@ namespace ClientSidePrediction
 
         void ServerOnUpdate()
         {
-            if (_inputQueue.Count == 0)
+            /*if (_inputQueue.Count == 0)
                 ProcessMovement(new InputData(Vector2.zero, _currentTick));
             else
-            {
+            {*/
                 while (_inputQueue.Count > 0)
                 {
                     var __input = _inputQueue.Dequeue();
@@ -137,7 +139,7 @@ namespace ClientSidePrediction
 
                     _lastProcessedInput = __input.tick;
                 }
-            }
+            //}
 
             var __position = new CharacterStateData(_characterController.transform.position, _verticalVelocity, _lastProcessedInput);
             

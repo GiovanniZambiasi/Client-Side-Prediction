@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using Mirror;
 using UnityEngine;
 
@@ -14,9 +15,14 @@ namespace ClientSidePrediction
         [SerializeField] Vector2Int _windowSize = new Vector2Int(225, 100);
         [SerializeField] Vector2 _windowViewportPosition = new Vector2(1, 0);
 
-        StringBuilder _sb = new StringBuilder(16);
         Camera _camera;
+        int _targetFPS = 64;
         bool _showPhantom = true;
+
+        void Awake()
+        {
+            _targetFPS = NetworkManager.singleton.serverTickRate;
+        }
 
         void OnGUI()
         {
@@ -51,6 +57,18 @@ namespace ClientSidePrediction
 
             if (__prev != _showPhantom)
                 _predictiveClient.SetPhantom(_showPhantom);
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Target FPS:");
+            
+            var __targetFPS = GUILayout.TextField(_targetFPS.ToString());
+            if (int.TryParse(__targetFPS, out var __result))
+                _targetFPS = __result;
+
+            if (GUILayout.Button("Apply"))
+                Application.targetFrameRate = _targetFPS;
+            
+            GUILayout.EndHorizontal();
         }
 
         void DrawStats()

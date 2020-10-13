@@ -24,7 +24,7 @@ namespace ClientSidePrediction
             }
         }
         
-        public void OnTick(uint currentTick)
+        public void OnTick(float deltaTime, uint currentTick)
         {
             var __lastestServerState = _networkedClient.LatestServerState;
             if (!__lastestServerState.Equals(_lastProcessedState))            // If the latest state received by the server has not been processed
@@ -36,7 +36,7 @@ namespace ClientSidePrediction
                 y = Input.GetAxis("Vertical")
             };
             
-            var __inputData = new InputData(__inputs, currentTick);
+            var __inputData = new InputData(__inputs, currentTick, deltaTime);
 
             var __bufferIndex = currentTick % BufferSize;
             

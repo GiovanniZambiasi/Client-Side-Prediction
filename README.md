@@ -1,2 +1,4 @@
-# Client-Side-Prediction
-Experiments with Client-Side prediction using unity and Mirror
+# Client-Side-Prediction with Mirror and Unity
+This repository contains networking studies of client-side prediction, implemented in two different scenarios:
+* a) CharacterController
+* b) Rigidbodies

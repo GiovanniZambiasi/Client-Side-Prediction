@@ -1,11 +1,11 @@
 == Features
-- Non-local clients *
-- Host clients? *
-- Gravity acceleration *
+- Packet optimization
 - Error interpolation
-- Don't sync redundant input
-- Jumping and air control
-- Physics-based movement?
+- Non-local clients ✓
+- Host clients? ✓
+- Gravity acceleration ✓
+- Jumping and (air control ✓)
+- Physics-based movement? ✓
 
 == Issues
-- Players running the simulation under target fps move slower, since they send less input messages/frame * 
+- Players running the simulation under target fps move slower, since they send less input messages/frame ✓ 

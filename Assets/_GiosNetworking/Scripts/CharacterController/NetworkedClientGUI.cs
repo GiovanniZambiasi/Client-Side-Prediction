@@ -1,14 +1,12 @@
-﻿using System;
-using System.Text;
-using Mirror;
+﻿using Mirror;
 using UnityEngine;
 
-namespace ClientSidePrediction
+namespace ClientSidePrediction.CC
 {
     public class NetworkedClientGUI : MonoBehaviour
     {
         [Header("Reference")]
-        [SerializeField] PredictiveClient _predictiveClient = null;
+        [SerializeField] CharacterControllerPrediction _predictiveClient = null;
         [SerializeField] NetworkedClient _networkedClient = null;
         [SerializeField] CharacterController _characterController = null;
         [Header("Settings")]
@@ -75,7 +73,7 @@ namespace ClientSidePrediction
         {
             GUILayout.Label("Stats");
             GUILayout.Label($"Current Tick: {_networkedClient.CurrentTick.ToString()}");
-            GUILayout.Label($"Delta Time: {_networkedClient.ServerDeltaTime.ToString()}");
+            GUILayout.Label($"Delta Time: {_networkedClient.MinTimeBetweenUpdates.ToString()}");
             GUILayout.Label($"Rtt: {NetworkTime.rtt.ToString()}");
             GUILayout.Label($"Velocity: {_characterController.velocity.ToString()}");
         }

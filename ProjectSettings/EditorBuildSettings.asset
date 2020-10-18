@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_GiosNetworking/Scene_NetworkingTest.unity
+    path: Assets/_GiosNetworking/CharacterController/Prediction_CharacterController.unity
     guid: 7ff60af65b0d5b743b8059d1d3cdd685
   m_configObjects: {}

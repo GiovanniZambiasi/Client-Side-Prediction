@@ -2703,13 +2703,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1860331341}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.3801373, y: -0.3960191, z: 0.18466674, w: 0.8152071}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 50, y: -51.82, z: 0}
 --- !u!1 &1920712348
 GameObject:
   m_ObjectHideFlags: 0
@@ -2811,7 +2811,7 @@ MonoBehaviour:
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 5099188760158918858, guid: 95e7ec852858ad84e89915c43a8a1187,
+  playerPrefab: {fileID: 4338266361639287296, guid: 31c50e1f3489a5846854e542326281d3,
     type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0

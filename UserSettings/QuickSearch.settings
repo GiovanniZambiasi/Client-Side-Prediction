@@ -15,6 +15,12 @@ scopes = {
 	"object.0260DB95" = "True"
 	"scene.0260DB95" = "True"
 	"settings.0260DB95" = "True"
+	"last_search.A8046BBE" = "gui"
+	"asset.A8046BBE" = "True"
+	"menu.A8046BBE" = "True"
+	"object.A8046BBE" = "True"
+	"scene.A8046BBE" = "True"
+	"settings.A8046BBE" = "True"
 }
 providers = {
 	asset = {
@@ -48,6 +54,16 @@ providers = {
 		defaultAction = null
 	}
 	query = {
+		active = true
+		priority = 100
+		defaultAction = null
+	}
+	store = {
+		active = true
+		priority = 100
+		defaultAction = null
+	}
+	res = {
 		active = true
 		priority = 100
 		defaultAction = null

@@ -4,8 +4,10 @@ using UnityEngine;
 namespace ClientSidePrediction.CC
 {
     [System.Serializable]
-    public struct CharacterState: IEquatable<CharacterState>
+    public struct CharacterState: IEquatable<CharacterState>, INetworkedClientState
     {
+        public uint LastProcessedInputTick => lastProcessedInput;
+        
         public Vector3 position;
         public float verticalVelocity;
         public uint lastProcessedInput;
@@ -22,9 +24,9 @@ namespace ClientSidePrediction.CC
             return position.Equals(other.position) && lastProcessedInput == other.lastProcessedInput;
         }
 
-        public override bool Equals(object obj)
+        public bool Equals(INetworkedClientState other)
         {
-            return obj is CharacterState other && Equals(other);
+            return other is CharacterState __other && Equals(__other);
         }
     }
 }

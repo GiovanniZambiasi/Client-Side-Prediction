@@ -1,25 +1,34 @@
-﻿using Mirror;
+﻿using System;
+using Mirror;
+using TMPro;
 using UnityEngine;
 
-namespace ClientSidePrediction.CC
+namespace ClientSidePrediction
 {
-    public class NetworkedClientGUI : MonoBehaviour
+    public abstract class NetworkedClientGUI : MonoBehaviour
     {
-        [Header("Reference")]
-        [SerializeField] CharacterControllerPrediction _predictiveClient = null;
+        [Header("Reference")] 
+        [SerializeField] ClientPrediction _predictiveClient = null;
         [SerializeField] NetworkedClient _networkedClient = null;
-        [SerializeField] CharacterController _characterController = null;
-        [Header("Settings")]
-        [SerializeField] Vector2Int _windowSize = new Vector2Int(225, 100);
+        [SerializeField] GameObject _phantomPrefab = null;
+        [Header("Settings")] 
+        [SerializeField] Vector2Int _windowSize = new Vector2Int(225, 225);
         [SerializeField] Vector2 _windowViewportPosition = new Vector2(1, 0);
 
+        GameObject _phantom;
         Camera _camera;
         int _targetFPS = 64;
-        bool _showPhantom = true;
+        bool _drawPhantom = false;
 
         void Awake()
         {
             _targetFPS = NetworkManager.singleton.serverTickRate;
+        }
+
+        void OnDestroy()
+        {
+            if(_phantom!=null)
+                Destroy(_phantom);
         }
 
         void OnGUI()
@@ -29,14 +38,14 @@ namespace ClientSidePrediction.CC
 
             if (_camera == null)
                 _camera = Camera.main;
-            
+
             var __screenPoint = _camera.ViewportToScreenPoint(_windowViewportPosition);
-            
+
             __screenPoint.x = Mathf.Clamp(__screenPoint.x, 0, Screen.width - _windowSize.x);
             __screenPoint.y = Mathf.Clamp(__screenPoint.y, 0, Screen.height - _windowSize.y);
-            
+
             var __rect = new Rect(__screenPoint, _windowSize);
-            
+
             GUI.Box(__rect, string.Empty);
 
             GUILayout.BeginArea(__rect);
@@ -50,32 +59,47 @@ namespace ClientSidePrediction.CC
         {
             GUILayout.Label("Settings");
 
-            var __prev = _showPhantom;
-            _showPhantom = GUILayout.Toggle(_showPhantom, "Show phantom");
+            if (!_networkedClient.isServer)
+            {
+                _drawPhantom = GUILayout.Toggle(_drawPhantom, "Draw phantom");
 
-            if (__prev != _showPhantom)
-                _predictiveClient.SetPhantom(_showPhantom);
+                if (_drawPhantom)
+                    DrawPhantom();
+            }
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Target FPS:");
-            
+
             var __targetFPS = GUILayout.TextField(_targetFPS.ToString());
             if (int.TryParse(__targetFPS, out var __result))
                 _targetFPS = __result;
 
             if (GUILayout.Button("Apply"))
                 Application.targetFrameRate = _targetFPS;
-            
+
             GUILayout.EndHorizontal();
         }
 
-        void DrawStats()
+        void DrawPhantom()
+        {
+            if (_phantom == null)
+            {
+                if (_phantomPrefab == null)
+                    return;
+                _phantom = Instantiate(_phantomPrefab);
+            }
+
+            SetPhantomState(_phantom, _networkedClient.LatestServerState);
+        }
+
+        protected virtual void DrawStats()
         {
             GUILayout.Label("Stats");
             GUILayout.Label($"Current Tick: {_networkedClient.CurrentTick.ToString()}");
-            GUILayout.Label($"Delta Time: {_networkedClient.MinTimeBetweenUpdates.ToString()}");
+            GUILayout.Label($"Delta Time: {(1f / NetworkManager.singleton.serverTickRate).ToString()}");
             GUILayout.Label($"Rtt: {NetworkTime.rtt.ToString()}");
-            GUILayout.Label($"Velocity: {_characterController.velocity.ToString()}");
         }
+
+        protected abstract void SetPhantomState(GameObject phantom, INetworkedClientState state);
     }
 }

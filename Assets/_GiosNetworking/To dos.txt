@@ -1,11 +1,11 @@
 == Features
-- Packet optimization
 - Error interpolation
+- Predictive Rigidbody 
 - Non-local clients ✓
 - Host clients? ✓
 - Gravity acceleration ✓
 - Jumping and (air control ✓)
-- Physics-based movement? ✓
 
 == Issues
 - Players running the simulation under target fps move slower, since they send less input messages/frame ✓ 
+- Current abstraction causes boxing allocations when storing input and state data

@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_GiosNetworking/MainMenu.unity
+    guid: d335172919db80749b4a69bfc5364b08
+  - enabled: 1
     path: Assets/_GiosNetworking/CharacterController/Prediction_CharacterController.unity
     guid: 7ff60af65b0d5b743b8059d1d3cdd685
+  - enabled: 1
+    path: Assets/_GiosNetworking/Rigidbody/Prediction_Rigidbody.unity
+    guid: c5f9faf90c5f2a94c87bf32431776002
   m_configObjects: {}

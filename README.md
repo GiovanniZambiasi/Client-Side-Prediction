@@ -3,7 +3,7 @@ _Made with Mirror for Unity_
 
 This repository contains a garbage free client-side prediction framework, implemented in two different example scenarios:
 * CharacterController
-* Rigidbodies
+* Rigidbodies _*To be completed_
 
 My goal is to develop an easy-to-use, garbage free framework to streamline the creation of client-side prediction across any scenario that needs it. Though the current solution isn't as user friendly as I'd like, it works, and will hopefully avoid the headache of adding all the boilerplate code to all predictive clients your project needs.
 

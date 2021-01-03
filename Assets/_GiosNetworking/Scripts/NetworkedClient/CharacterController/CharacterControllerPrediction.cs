@@ -1,12 +1,11 @@
-﻿using System;
-using ClientSidePrediction.RB;
+﻿using ClientSidePrediction.RB;
 using UnityEngine;
 
 namespace ClientSidePrediction.CC
 {
-    public class CharacterControllerPrediction : ClientPrediction
+    public class CharacterControllerPrediction : ClientPrediction<CharacterControllerInput, CharacterControllerState> 
     {
-        protected override INetworkedClientInput GetInput(float deltaTime, uint currentTick)
+        protected override CharacterControllerInput GetInput(float deltaTime, uint currentTick)
         {
             var __inputs = new Vector2
             {
@@ -14,7 +13,7 @@ namespace ClientSidePrediction.CC
                 y = Input.GetAxis("Vertical")
             };
             
-            return new CharacterInput(__inputs, currentTick, deltaTime);
+            return new CharacterControllerInput(__inputs, currentTick, deltaTime);
         }
     }
 }

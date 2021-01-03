@@ -4,16 +4,19 @@ using UnityEngine;
 
 namespace ClientSidePrediction
 {
-    public abstract class NetworkedClient : NetworkBehaviour
+    public abstract class NetworkedClient<TClientInput, TClientState> : MonoBehaviour, INetworkedClient 
+        where TClientInput : INetworkedClientInput
+        where TClientState : INetworkedClientState 
     {
-        public INetworkedClientState LatestServerState => _latestServerState;
+        public INetworkedClientState LatestServerState => _messenger.LatestServerState;
         public uint CurrentTick => _currentTick;
 
-        [Header("Client/References")]
-        [SerializeField] ClientPrediction _prediction = null;
-        
-        Queue<INetworkedClientInput> _inputQueue = new Queue<INetworkedClientInput>(6);
-        INetworkedClientState _latestServerState;
+        [Header("Client/References")] 
+        [SerializeField] NetworkIdentity _identity = null;
+
+        INetworkedClientMessenger<TClientInput, TClientState> _messenger;
+        ClientPrediction<TClientInput, TClientState> _prediction = null;
+        Queue<TClientInput> _inputQueue = new Queue<TClientInput>(6);       // *TODO maybe move the queue to the INetworkedClientMessenger. This would avoid the need for an event, but would still require the dev to declare and maintain the queue
         float _minTimeBetweenUpdates = 0f;
         float _timeSinceLastTick = 0f;
         uint _lastProcessedInputTick = 0;
@@ -21,6 +24,20 @@ namespace ClientSidePrediction
 
         void Awake()
         {
+            _prediction = GetComponent<ClientPrediction<TClientInput, TClientState>>();
+            
+            if(_prediction == null)
+                Debug.LogError($"Couldn't find client for {name}");
+
+            _messenger = GetComponent<INetworkedClientMessenger<TClientInput, TClientState>>();
+            
+            if(_messenger == null)
+                Debug.LogError($"Couldn't find sender for {name}");
+            else
+            {
+                _messenger.OnInputReceived += HandleInputReceived;
+            }
+            
             _minTimeBetweenUpdates = 1f / NetworkManager.singleton.serverTickRate;
         }
 
@@ -32,24 +49,42 @@ namespace ClientSidePrediction
                 HandleTick();
         }
 
-        public abstract void SetState(INetworkedClientState state);
+        public abstract void SetState(TClientState state);
 
-        public abstract void ProcessInput(INetworkedClientInput input);
+        public abstract void ProcessInput(TClientInput input);
 
-        public abstract void SendClientInput(INetworkedClientInput input);
-
-        protected void ClientHandleStateReceived(INetworkedClientState state)
+        public void SendClientInput(TClientInput input)
         {
-            _latestServerState = state;
+            _messenger.SendInput(input);
         }
 
-        protected void ServerHandleInputReceived(INetworkedClientInput input)
+        protected abstract TClientState RecordState(uint lastProcessedInputTick);
+        
+        void HandleInputReceived(TClientInput input)
         {
             _inputQueue.Enqueue(input);
         }
-
-        protected abstract void SendServerState(uint lastProcessedInputTick);
         
+        void HandleTick()
+        {
+            if (_identity.isClient && _identity.hasAuthority)
+                _prediction.HandleTick(_timeSinceLastTick, _currentTick, _messenger.LatestServerState);    // Client-side prediction
+            else if (!_identity.isServer)
+                SetState(_messenger.LatestServerState);                                                    // Entity interpolation *TODO
+            
+            if(_identity.isServer)
+                ServerProcessInputsAndSendState();
+
+            _currentTick++;
+            _timeSinceLastTick = 0f;
+        }
+
+        void ServerProcessInputsAndSendState()
+        {
+            ProcessInputs();
+            SendState();
+        }
+
         void ProcessInputs()
         {
             while (_inputQueue.Count > 0)
@@ -60,25 +95,11 @@ namespace ClientSidePrediction
                 _lastProcessedInputTick = __input.Tick;
             }
         }
-        
-        void HandleTick()
-        {
-            if (isClient && hasAuthority)
-                _prediction.HandleTick(_timeSinceLastTick, _currentTick, _latestServerState);    // Client-side prediction
-            else if (!isServer)
-                SetState(_latestServerState);                                                    // Entity interpolation *TODO
-            
-            if(isServer)
-                ServerProcessInputsAndSendState();
 
-            _currentTick++;
-            _timeSinceLastTick = 0f;
-        }
-
-        void ServerProcessInputsAndSendState()
+        void SendState()
         {
-            ProcessInputs();
-            SendServerState(_lastProcessedInputTick);   
+            var __state = RecordState(_lastProcessedInputTick);
+            _messenger.SendState(__state);
         }
     }
 }

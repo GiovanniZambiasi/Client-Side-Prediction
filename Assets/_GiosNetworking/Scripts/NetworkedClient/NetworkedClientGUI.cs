@@ -1,6 +1,4 @@
-﻿using System;
-using Mirror;
-using TMPro;
+﻿using Mirror;
 using UnityEngine;
 
 namespace ClientSidePrediction
@@ -8,13 +6,14 @@ namespace ClientSidePrediction
     public abstract class NetworkedClientGUI : MonoBehaviour
     {
         [Header("Reference")] 
-        [SerializeField] ClientPrediction _predictiveClient = null;
-        [SerializeField] NetworkedClient _networkedClient = null;
+        [SerializeField] GameObject _networkedClient = null;
         [SerializeField] GameObject _phantomPrefab = null;
         [Header("Settings")] 
         [SerializeField] Vector2Int _windowSize = new Vector2Int(225, 225);
         [SerializeField] Vector2 _windowViewportPosition = new Vector2(1, 0);
 
+        INetworkedClient _client;
+        NetworkIdentity _clientIdentity;
         GameObject _phantom;
         Camera _camera;
         int _targetFPS = 64;
@@ -22,6 +21,9 @@ namespace ClientSidePrediction
 
         void Awake()
         {
+            _client = _networkedClient.GetComponent<INetworkedClient>();
+            _clientIdentity = _networkedClient.GetComponent<NetworkIdentity>();
+            
             _targetFPS = NetworkManager.singleton.serverTickRate;
         }
 
@@ -33,7 +35,7 @@ namespace ClientSidePrediction
 
         void OnGUI()
         {
-            if (!_networkedClient.isClient || !_networkedClient.hasAuthority)
+            if (!_clientIdentity.isClient || !_clientIdentity.hasAuthority)
                 return;
 
             if (_camera == null)
@@ -59,7 +61,7 @@ namespace ClientSidePrediction
         {
             GUILayout.Label("Settings");
 
-            if (!_networkedClient.isServer)
+            if (!_clientIdentity.isServer)
             {
                 _drawPhantom = GUILayout.Toggle(_drawPhantom, "Draw phantom");
 
@@ -89,13 +91,13 @@ namespace ClientSidePrediction
                 _phantom = Instantiate(_phantomPrefab);
             }
 
-            SetPhantomState(_phantom, _networkedClient.LatestServerState);
+            SetPhantomState(_phantom, _client.LatestServerState);
         }
 
         protected virtual void DrawStats()
         {
             GUILayout.Label("Stats");
-            GUILayout.Label($"Current Tick: {_networkedClient.CurrentTick.ToString()}");
+            GUILayout.Label($"Current Tick: {_client.CurrentTick.ToString()}");
             GUILayout.Label($"Delta Time: {(1f / NetworkManager.singleton.serverTickRate).ToString()}");
             GUILayout.Label($"Rtt: {NetworkTime.rtt.ToString()}");
         }

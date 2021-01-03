@@ -2,7 +2,7 @@
 
 namespace ClientSidePrediction.RB
 {
-    public struct ClientInput : INetworkedClientInput
+    public struct RigidbodyInput : INetworkedClientInput
     {
         public uint Tick => tick;
         
@@ -10,7 +10,7 @@ namespace ClientSidePrediction.RB
         public float deltaTime;
         public uint tick;
         
-        public ClientInput(Vector2 movement, float deltaTime, uint tick)
+        public RigidbodyInput(Vector2 movement, float deltaTime, uint tick)
         {
             this.movement = movement;
             this.deltaTime = deltaTime;

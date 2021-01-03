@@ -14,7 +14,7 @@ namespace ClientSidePrediction.CC
 
         protected override void SetPhantomState(GameObject phantom, INetworkedClientState state)
         {
-            var __state = (CharacterState) state;
+            var __state = (CharacterControllerState) state;
             phantom.transform.position = __state.position;
         }
     }

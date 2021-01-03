@@ -1,54 +1,32 @@
-﻿using Mirror;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ClientSidePrediction.RB
 {
-    public class NetworkedRigidbody : NetworkedClient
+    public class NetworkedRigidbody : NetworkedClient<RigidbodyInput, RigidbodyState>
     {
         [Header("Rigidbody/References")]
         [SerializeField] Rigidbody _rigidbody = null;
         [Header("Rigidbody/Settings")]
         [SerializeField] float _speed = 10f;
 
-        [ClientRpc]
-        public void RpcSendState(RigidbodyState state)
+        public override void SetState(RigidbodyState state)
         {
-            ClientHandleStateReceived(state);
+            _rigidbody.position = state.position;
+            _rigidbody.velocity = state.velocity;
+            _rigidbody.rotation = state.rotation;
+            _rigidbody.angularVelocity = state.angularVelocity;
         }
 
-        [Command]
-        public void CmdSendInput(ClientInput clientInput)
+        public override void ProcessInput(RigidbodyInput input)
         {
-            ServerHandleInputReceived(clientInput);
-        }
-        
-        public override void SetState(INetworkedClientState state)
-        {
-            var __state = (RigidbodyState)state;
-            _rigidbody.position = __state.position;
-            _rigidbody.velocity = __state.velocity;
-            _rigidbody.rotation = __state.rotation;
-            _rigidbody.angularVelocity = __state.angularVelocity;
-        }
-
-        public override void ProcessInput(INetworkedClientInput input)
-        {
-            var __input = (ClientInput) input;
-            var __force = new Vector3(__input.movement.x, 0f, __input.movement.y);
-            __force *= _speed * __input.deltaTime;
+            var __force = new Vector3(input.movement.x, 0f, input.movement.y);
+            __force *= _speed * input.deltaTime;
             _rigidbody.AddForce(__force, ForceMode.Impulse);
         }
 
-        public override void SendClientInput(INetworkedClientInput input)
+        protected override RigidbodyState RecordState(uint lastProcessedInputTick)
         {
-            var __input = (ClientInput)input;
-            CmdSendInput(__input);
-        }
-
-        protected override void SendServerState(uint lastProcessedInputTick)
-        {
-            var __state = new RigidbodyState(_rigidbody.position, _rigidbody.velocity, _rigidbody.angularVelocity, _rigidbody.rotation, lastProcessedInputTick);
-            RpcSendState(__state);
+            return new RigidbodyState(_rigidbody.position, _rigidbody.velocity, _rigidbody.angularVelocity, _rigidbody.rotation, lastProcessedInputTick);
         }
     }
 }

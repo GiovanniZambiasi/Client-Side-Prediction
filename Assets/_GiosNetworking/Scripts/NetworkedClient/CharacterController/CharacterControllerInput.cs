@@ -3,7 +3,7 @@
 namespace ClientSidePrediction.CC
 {
     [System.Serializable]
-    public struct CharacterInput : INetworkedClientInput
+    public struct CharacterControllerInput : INetworkedClientInput
     {
         public uint Tick => tick;
         
@@ -11,7 +11,7 @@ namespace ClientSidePrediction.CC
         public Vector2 input;
         public float deltaTime;
 
-        public CharacterInput(Vector2 input, uint tick, float deltaTime)
+        public CharacterControllerInput(Vector2 input, uint tick, float deltaTime)
         {
             this.input = input;
             this.tick = tick;

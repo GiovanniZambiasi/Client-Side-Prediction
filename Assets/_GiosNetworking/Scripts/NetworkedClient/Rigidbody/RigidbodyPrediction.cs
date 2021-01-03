@@ -2,9 +2,9 @@
 
 namespace ClientSidePrediction.RB
 {
-    public class RigidbodyPrediction : ClientPrediction
+    public class RigidbodyPrediction : ClientPrediction<RigidbodyInput, RigidbodyState>
     {
-        protected override INetworkedClientInput GetInput(float deltaTime, uint currentTick)
+        protected override RigidbodyInput GetInput(float deltaTime, uint currentTick)
         {
             var __movement = new Vector2
             {
@@ -12,7 +12,7 @@ namespace ClientSidePrediction.RB
                 y = Input.GetAxis("Vertical")
             };
 
-            return new ClientInput(__movement, deltaTime, currentTick);
+            return new RigidbodyInput(__movement, deltaTime, currentTick);
         }
     }
 }

@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 5761167607863809860}
   - component: {fileID: 2610834976139989009}
   - component: {fileID: 7002440823903531370}
+  - component: {fileID: 8197562010201590729}
   m_Layer: 0
   m_Name: Client_Rigidbody
   m_TagString: Untagged
@@ -144,9 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f4786708bdd58f48ba9f2e545069809, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  _prediction: {fileID: 2610834976139989009}
+  _identity: {fileID: 4077879557230518444}
   _rigidbody: {fileID: 4120638000040847046}
   _speed: 15
 --- !u!114 &2610834976139989009
@@ -161,8 +160,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db4516b666894ea5b329d919c846a060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _identity: {fileID: 4077879557230518444}
   _bufferSize: 1024
-  _client: {fileID: 5761167607863809860}
 --- !u!114 &7002440823903531370
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,10 +174,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bf3280455624dc4a84c9d57e642faf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _predictiveClient: {fileID: 2610834976139989009}
-  _networkedClient: {fileID: 5761167607863809860}
+  _networkedClient: {fileID: 4338266361639287296}
   _phantomPrefab: {fileID: 1281111753784048131, guid: f89fddade319000439a2cd6f0d315336,
     type: 3}
   _windowSize: {x: 225, y: 225}
   _windowViewportPosition: {x: 1, y: 0}
   _rigidbody: {fileID: 4120638000040847046}
+--- !u!114 &8197562010201590729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4338266361639287296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a93492b71b54a66bdeabd5dec66007b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1

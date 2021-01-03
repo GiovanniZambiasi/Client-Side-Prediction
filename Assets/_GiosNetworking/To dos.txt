@@ -1,6 +1,9 @@
 == Features
 - Error interpolation
 - Predictive Rigidbody 
+	> Store states in buffer
+	> Calculate error when pos comes to determine if prediction update needed
+	> If so, re-simulate physics scene (and disable all other RBs in the scene
 - Non-local clients ✓
 - Host clients? ✓
 - Gravity acceleration ✓
@@ -8,4 +11,3 @@
 
 == Issues
 - Players running the simulation under target fps move slower, since they send less input messages/frame ✓ 
-- Current abstraction causes boxing allocations when storing input and state data

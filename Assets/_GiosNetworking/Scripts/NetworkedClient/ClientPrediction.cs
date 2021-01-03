@@ -1,27 +1,35 @@
-﻿using System;
+﻿using Mirror;
 using UnityEngine;
 
 namespace ClientSidePrediction
 {
-    public abstract class ClientPrediction : MonoBehaviour
+    public abstract class ClientPrediction<TClientInput, TClientState> : MonoBehaviour 
+        where TClientInput : INetworkedClientInput
+        where TClientState : INetworkedClientState
     {
+        [Header("Prediction/References")]
+        [SerializeField] NetworkIdentity _identity = null;
         [Header("Prediction/Settings")] 
         [SerializeField, Tooltip("The number of ticks to be stored in the input and state buffers")]
         uint _bufferSize = 1024;
-        [Header("Prediction/References")]
-        [SerializeField] NetworkedClient _client = null;
         
-        INetworkedClientInput[] _inputBuffer;
-        INetworkedClientState _lastProcessedState = default;
+        NetworkedClient<TClientInput, TClientState> _client = null;
+        TClientInput[] _inputBuffer;
+        TClientState _lastProcessedState = default;
         
         protected virtual void Awake()
         {
-            _inputBuffer = new INetworkedClientInput[_bufferSize];
+            _client = GetComponent<NetworkedClient<TClientInput, TClientState>>();
+            
+            if(_client == null)
+                Debug.LogError($"Couldn't find client for {name}");
+
+            _inputBuffer = new TClientInput[_bufferSize];
         }
  
-        public void HandleTick(float deltaTime, uint currentTick, INetworkedClientState latestServerState)
+        public void HandleTick(float deltaTime, uint currentTick, TClientState latestServerState)
         {
-            if(!_client.isServer && (latestServerState != null && (_lastProcessedState == null || !_lastProcessedState.Equals(latestServerState))))
+            if(!_identity.isServer && (latestServerState != null && (_lastProcessedState == null || !_lastProcessedState.Equals(latestServerState))))
                 UpdatePrediction(currentTick, latestServerState);
 
             var __input = GetInput(deltaTime, currentTick);
@@ -32,13 +40,13 @@ namespace ClientSidePrediction
             
             _client.SendClientInput(__input);
             
-            if(!_client.isServer)
+            if(!_identity.isServer)
                 _client.ProcessInput(__input);
         }
 
-        protected abstract INetworkedClientInput GetInput(float deltaTime, uint currentTick);
+        protected abstract TClientInput GetInput(float deltaTime, uint currentTick);
         
-        void UpdatePrediction(uint currentTick, INetworkedClientState latestServerState)
+        void UpdatePrediction(uint currentTick, TClientState latestServerState)
         {
             _lastProcessedState = latestServerState;
             

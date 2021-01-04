@@ -114,7 +114,74 @@ public struct RigidbodyInput : INetworkedClientInput
 
 ### 3) Implement the _Messenger_
 
-...TBD
+The _Messenger_ is a component that's really a workaround. Because Mirror doesn't support generic arguments in a _NetworkBehaviour_, the messaging part of the `NetworkedClient` needs to be encapsulated in a separate component.
+
+The _Messenger_ is an interface:
+```cs
+public interface INetworkedClientMessenger<TClientInput, TClientState>
+        where TClientInput : INetworkedClientInput
+        where TClientState : INetworkedClientState
+{
+        event System.Action<TClientInput> OnInputReceived;
+
+        TClientState LatestServerState { get; }
+        
+        void SendState(TClientState state);
+
+        void SendInput(TClientInput input);
+}
+```
+
+
+To implement it, the developer needs to create a `NetworkBehaviour` that implements the interface, using their _state_ and _input_ blocks as the `TCLientInput` and `TClientState` generic parameters, respectivelly:
+```cs
+public class NetworkedRigidbodyMessenger : NetworkBehaviour, INetworkedClientMessenger<RigidbodyInput, RigidbodyState>
+```
+
+
+The `SendState` method should call an _Rpc_ and send the provided _state_ to the clients:
+```cs
+public void SendState(RigidbodyState state)
+{
+            RpcSendState(state);
+}
+
+[ClientRpc(channel = Channels.DefaultUnreliable)]       // It's recommended to use the unreliable channel, since this message will be sent frequently
+void RpcSendState(RigidbodyState state)
+{
+            _latestServerState = state;
+}
+```
+
+
+The `SendInput` method should call a _Cmd_ and send the provided _input_ to the server:
+```cs
+public void SendInput(RigidbodyInput input)
+{
+            CmdSendInput(input);
+}
+
+[Command(channel = Channels.DefaultUnreliable)]       // It's recommended to use the unreliable channel, since this message will be sent frequently
+void CmdSendInput(RigidbodyInput state)
+{
+            //...
+}
+```
+
+
+Lastly, the _Messenger_ *must* implement an ``Action`` of the input type, and invoke it whenever an _input_ message is received:
+```cs
+public void SendInput(RigidbodyInput input)
+{
+            CmdSendInput(input);
+}
+
+[Command(channel = Channels.DefaultUnreliable)]
+void CmdSendInput(RigidbodyInput state)
+{
+            OnInputReceived?.Invoke(state);
+}
+```
 
 ### 4) Implement the _Client_
 

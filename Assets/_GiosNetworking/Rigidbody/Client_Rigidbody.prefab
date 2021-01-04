@@ -16,8 +16,8 @@ GameObject:
   - component: {fileID: 4077879557230518444}
   - component: {fileID: 5761167607863809860}
   - component: {fileID: 2610834976139989009}
-  - component: {fileID: 7002440823903531370}
   - component: {fileID: 8197562010201590729}
+  - component: {fileID: 7002440823903531370}
   m_Layer: 0
   m_Name: Client_Rigidbody
   m_TagString: Untagged
@@ -162,6 +162,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _identity: {fileID: 4077879557230518444}
   _bufferSize: 1024
+--- !u!114 &8197562010201590729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4338266361639287296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a93492b71b54a66bdeabd5dec66007b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!114 &7002440823903531370
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,17 +194,3 @@ MonoBehaviour:
   _windowSize: {x: 225, y: 225}
   _windowViewportPosition: {x: 1, y: 0}
   _rigidbody: {fileID: 4120638000040847046}
---- !u!114 &8197562010201590729
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4338266361639287296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a93492b71b54a66bdeabd5dec66007b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1

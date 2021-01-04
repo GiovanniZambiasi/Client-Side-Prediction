@@ -1,6 +1,6 @@
 ﻿namespace ClientSidePrediction
 {
-    // The networking of inputs and states needs to be encapsulated in this class because Mirror doesn't support generic
+    // The networking of inputs and states needs to be encapsulated in this interface because Mirror doesn't support generic
     // arguments in their classes. If it did, this behaviour could be inside the implementation of NetworkedClient
     public interface INetworkedClientMessenger<TClientInput, TClientState>
         where TClientInput : INetworkedClientInput

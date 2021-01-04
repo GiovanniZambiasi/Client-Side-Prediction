@@ -6,6 +6,7 @@ namespace ClientSidePrediction.CC
     public struct CharacterControllerInput : INetworkedClientInput
     {
         public uint Tick => tick;
+        public float DeltaTime => deltaTime;
         
         public uint tick;
         public Vector2 input;

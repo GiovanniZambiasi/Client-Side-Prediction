@@ -5,7 +5,7 @@ This repository contains a garbage free client-side prediction framework, implem
 * CharacterController
 * Rigidbodies _*To be completed_
 
-My goal is to develop an easy-to-use, garbage free framework to streamline the creation of client-side prediction across any scenario that needs it. Though the current solution isn't as user friendly as I'd like, it works, and will hopefully avoid the headache of adding all the boilerplate code to all predictive clients your project needs.
+My goal is to develop an easy-to-use, garbage free framework to streamline the implementation of client-side prediction across any scenario that needs it. Though the current solution is still a work-in-progress, it works, and will hopefully avoid the headache of adding all the boilerplate code to all predictive clients your project needs.
 
 ## How to use
 

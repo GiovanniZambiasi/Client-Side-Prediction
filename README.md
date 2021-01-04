@@ -262,6 +262,15 @@ protected override RigidbodyInput GetInput(float deltaTime, uint currentTick)
 
 At every tick, the component will check if any new states have been received by the server. If so, the client will be set to that new state, and all recorded input packets from that point onwards will be re-simulated. This fulfills the _client-side prediction_.
 
-### Finally
+### Finally...
 
-...TBD
+Once the 5 previous steps have been completed, all that's left to do is assemble your object in unity. For that, the developer will need to create a prefab which contains, at least:
+ * The `NetworkedClient` component created at step 4
+ * The `ClientPrediction` component created at step 5
+ * The `Messenger` component created at step 3
+ * A `NetworkIdentity` component
+ 
+![Prefab_Example_1](https://i.imgur.com/RQs6tSi.png)
+<br>
+Then, the _dependencies_ of `NetworkedClient` and `ClientPrediction` need to be fulfilled:
+![Prefab_Example_2](https://i.imgur.com/vNXplPK_d.webp?maxwidth=760&fidelity=grand)

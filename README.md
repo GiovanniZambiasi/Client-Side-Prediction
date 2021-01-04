@@ -274,3 +274,16 @@ Once the 5 previous steps have been completed, all that's left to do is assemble
 <br>
 Then, the _dependencies_ of `NetworkedClient` and `ClientPrediction` need to be fulfilled:
 ![Prefab_Example_2](https://i.imgur.com/vNXplPK_d.webp?maxwidth=760&fidelity=grand)
+
+
+## DEMO
+
+### CharacterController
+
+...TBD
+
+### Rigidbody
+
+The rigidbody example scenario is still a work in progress. The current state only supports a client on a headless server. The body is simulated via the [PhysicsScene.Simulate](https://docs.unity3d.com/ScriptReference/PhysicsScene.Simulate.html) method.
+[Demo Video](https://www.dropbox.com/s/mecrbnjv7rekrez/s2boAZU2hf.mp4?dl=0)
+

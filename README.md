@@ -284,7 +284,7 @@ Then, the _dependencies_ of `NetworkedClient` and `ClientPrediction` need to be 
 
 ### Rigidbody
 
-The rigidbody example scenario is still a work in progress. The current state only supports a client on a headless server. The body is simulated via the [PhysicsScene.Simulate](https://docs.unity3d.com/ScriptReference/PhysicsScene.Simulate.html) method. In the following [Demo Video](https://youtu.be/HjjkzmpKLuI):
+The rigidbody example scenario is still a work in progress. The current state only supports a client on a headless server. The body is simulated via the [PhysicsScene.Simulate](https://docs.unity3d.com/ScriptReference/PhysicsScene.Simulate.html) method. In the following [Demo Video](https://youtu.be/HjjkzmpKLuI):<br>
 [![Everything Is AWESOME](https://img.youtube.com/vi/HjjkzmpKLuI/0.jpg)](https://www.youtube.com/watch?v=HjjkzmpKLuI "Everything Is AWESOME")
 
  I simulated 150ms of lag using [clumsy](https://jagt.github.io/clumsy/)

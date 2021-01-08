@@ -1,9 +1,9 @@
 # Client-Side-Prediction framework
-_Made with Mirror for Unity_
+_Made with [Mirror](https://mirror-networking.com/) for Unity_
 
 This repository contains a garbage free client-side prediction framework, implemented in two different example scenarios:
-* CharacterController
-* [Rigidbodies](#rigidbody) _*To be completed_
+* [CharacterController](#charactercontroller)
+* [Rigidbodies](#rigidbody) _*WIP_
 
 My goal is to develop an easy-to-use, garbage free framework to streamline the implementation of client-side prediction across any scenario that needs it. Though the current solution is still a work-in-progress, it works, and will hopefully avoid the headache of adding all the boilerplate code to all predictive clients your project needs.
 
@@ -280,12 +280,14 @@ Then, the _dependencies_ of `NetworkedClient` and `ClientPrediction` need to be 
 
 ### CharacterController
 
-...TBD
+The [CharacterController](https://docs.unity3d.com/Manual/class-CharacterController.html) example features a simple controller that moves and has gravity applied, though it can be extended quite easily. I recorded a demo where I simulated 150ms of lag using [clumsy](https://jagt.github.io/clumsy/), and then applied a packet loss rate of 2%. Here's the [Video](https://youtu.be/EVwhoD6A6J0):<br>
+[![Everything Is AWESOME](https://i.ytimg.com/an_webp/EVwhoD6A6J0/mqdefault_6s.webp?du=3000&sqp=CNWT4v8F&rs=AOn4CLDCcxOaQHkGfmh0lO3-nR92NebjXA)](https://youtu.be/EVwhoD6A6J0)
+<br>
+Note that the demo doesn't include any kind of entity interpolation, so the server's client just flickers in the client's screen when packet loss is enabled. The client's cube however is fully predictive.
 
 ### Rigidbody
 
 The rigidbody example scenario is still a work in progress. The bodies are simulated via the [PhysicsScene.Simulate](https://docs.unity3d.com/ScriptReference/PhysicsScene.Simulate.html) method. When not simulating, the client is moved to an empty scene created in runtime called "Idle". This implementation is simple and easy to understand, but it stops the clients interacting with one-another. I recorded a demo where I simulated 150ms of lag using [clumsy](https://jagt.github.io/clumsy/), and then applied a packet loss rate of 2%. Here's the [Video](https://youtu.be/lxiUcX3ZgyI):<br>
 [![Everything Is AWESOME](https://i.ytimg.com/vi/lxiUcX3ZgyI/hqdefault.jpg?sqp=-oaymwEZCPYBEIoBSFXyq4qpAwsIARUAAIhCGAFwAQ==&rs=AOn4CLDF2MNTSKtVIH-14FxC54yh_A86uA)](https://youtu.be/lxiUcX3ZgyI)
 <br>
-Note that the demo doesn't include any kind of entity interpolation, so the server's cube just flickers in the client's screen when packet loss is on. The client's cube however is fully predictive.
- 
+Note that the demo doesn't include any kind of entity interpolation, so the server's cube just flickers in the client's screen when packet loss is enabled. The client's cube however is fully predictive.

@@ -17,5 +17,10 @@ namespace ClientSidePrediction.RB
             this.deltaTime = deltaTime;
             this.tick = tick;
         }
+
+        public override string ToString()
+        {
+            return $"Movement: {movement.ToString()} | DT: {deltaTime.ToString()} | Tick: {tick.ToString()}";
+        }
     }
 }

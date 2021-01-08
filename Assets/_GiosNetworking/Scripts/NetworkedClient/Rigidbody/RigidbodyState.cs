@@ -32,5 +32,11 @@ namespace ClientSidePrediction.RB
         {
             return other is RigidbodyState __other && Equals(__other);
         }
+
+        public override string ToString()
+        {
+            return
+                $"Pos: {position.ToString()} | Vel: {velocity.ToString()} | Angular Vel: {angularVelocity.ToString()} | Rot: {rotation.ToString()} | LasProcessInput: {lastProcessedInputTick.ToString()}";
+        }
     }
 }

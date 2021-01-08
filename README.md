@@ -1,4 +1,4 @@
-# Client-Side-Prediction framework
+# Client-Side Prediction framework
 _Made with [Mirror](https://mirror-networking.com/) for Unity_
 
 This repository contains a garbage free client-side prediction framework, implemented in two different example scenarios:
@@ -6,6 +6,10 @@ This repository contains a garbage free client-side prediction framework, implem
 * [Rigidbodies](#rigidbody) _*WIP_
 
 My goal is to develop an easy-to-use, garbage free framework to streamline the implementation of client-side prediction across any scenario that needs it. Though the current solution is still a work-in-progress, it works, and will hopefully avoid the headache of adding all the boilerplate code to all predictive clients your project needs.
+
+## What is client-side prediction?
+
+Client-side prediction is a way to hide the issues of a bad internet connection. It'll stop input lag, and minimize the jitteriness of packet loss. For more information, I recommend [this](https://www.gabrielgambetta.com/client-side-prediction-server-reconciliation.html) article.
 
 ## How to use
 

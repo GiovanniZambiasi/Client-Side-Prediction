@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Mirror;
 using UnityEngine;
 
@@ -70,13 +71,18 @@ namespace ClientSidePrediction
             if (_identity.isClient && _identity.hasAuthority)
                 _prediction.HandleTick(_timeSinceLastTick, _currentTick, _messenger.LatestServerState);    // Client-side prediction
             else if (!_identity.isServer)
-                SetState(_messenger.LatestServerState);                                                    // Entity interpolation *TODO
-            
+                HandleOtherPlayerState(_messenger.LatestServerState);                                       // Entity interpolation *TODO
+                
             if(_identity.isServer)
                 ServerProcessInputsAndSendState();
 
             _currentTick++;
             _timeSinceLastTick = 0f;
+        }
+
+        protected virtual void HandleOtherPlayerState(TClientState state)
+        {
+            SetState(state);
         }
 
         void ServerProcessInputsAndSendState()
@@ -100,6 +106,24 @@ namespace ClientSidePrediction
         {
             var __state = RecordState(_lastProcessedInputTick);
             _messenger.SendState(__state);
+        }
+
+        protected void LogState()
+        {
+            Debug.Log(LatestServerState.ToString());
+        }
+
+        protected void LogInputQueue()
+        {
+            var __log = $"Input queue count: {_inputQueue.Count.ToString()}\n";
+            
+            for (var i = 0; i < _inputQueue.Count; i++)
+            {
+                var __input = _inputQueue.ElementAt(i);
+                __log += $"{__input.ToString()}\n";
+            }
+
+            Debug.Log(__log);
         }
     }
 }

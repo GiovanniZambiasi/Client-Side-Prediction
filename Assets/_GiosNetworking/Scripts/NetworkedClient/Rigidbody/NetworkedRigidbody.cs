@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ClientSidePrediction.RB
 {
@@ -9,39 +11,90 @@ namespace ClientSidePrediction.RB
         [Header("Rigidbody/Settings")]
         [SerializeField] float _speed = 10f;
 
+        Scene _mainScene;
+        Scene _idleScene;
         PhysicsScene _physicsScene;
-        
+
         void Start()
         {
-            var __scene = gameObject.scene;
-            
-            _physicsScene = __scene.GetPhysicsScene();
+            _mainScene = gameObject.scene;
 
-            Physics.autoSimulation = false;
+            GetOrCreateIdleScene();
             
-            //_rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+            MoveToScene(_idleScene);
+            
+            Physics.autoSimulation = false;
         }
 
         public override void SetState(RigidbodyState state)
         {
-            _rigidbody.position = state.position;
+            if(testLog)
+                Debug.Log($"RBPos before setting state: {_rigidbody.position.ToString()} | trans: {transform.position.ToString()} | New pos: <b>{state.position.ToString()}</b>");
+            
+            transform.position = state.position;
+            transform.rotation = state.rotation;
             _rigidbody.velocity = state.velocity;
-            _rigidbody.rotation = state.rotation;
             _rigidbody.angularVelocity = state.angularVelocity;
+        
+            if(testLog)
+                Debug.Log($"AFTER setting state: {_rigidbody.position.ToString()} | trans: {transform.position.ToString()}");
         }
 
+        public bool testLog = false;
+        
         public override void ProcessInput(RigidbodyInput input)
         {
+            MoveToScene(_mainScene);
+            
             var __force = new Vector3(input.movement.x, 0f, input.movement.y);
             __force *= _speed * input.deltaTime;
             _rigidbody.AddForce(__force, ForceMode.Impulse);
             
             _physicsScene.Simulate(input.deltaTime);
+
+            MoveToScene(_idleScene);
         }
 
         protected override RigidbodyState RecordState(uint lastProcessedInputTick)
         {
-            return new RigidbodyState(_rigidbody.position, _rigidbody.velocity, _rigidbody.angularVelocity, _rigidbody.rotation, lastProcessedInputTick);
+            return new RigidbodyState(transform.position, _rigidbody.velocity, _rigidbody.angularVelocity, transform.rotation, lastProcessedInputTick);
+        }
+
+        void GetOrCreateIdleScene()
+        {
+            _idleScene = SceneManager.GetSceneByName("Idle");
+            
+            if(!_idleScene.IsValid())
+                CreateIdleScene();
+        }
+
+        void CreateIdleScene()
+        {
+            var __parameters = new CreateSceneParameters(LocalPhysicsMode.Physics3D);
+            _idleScene = SceneManager.CreateScene("Idle", __parameters);
+        }
+
+        void MoveToScene(Scene scene)
+        {
+            SceneManager.MoveGameObjectToScene(gameObject, scene);
+        }
+        
+        [ContextMenu("LogState")]
+        void LogRBState()
+        {
+            LogState();
+        }
+
+        [ContextMenu("LongInputQueue")]
+        void LogRBInput()
+        {
+            LogInputQueue();
+        }
+        
+        [ContextMenu("Log RB Pos")]
+        void LogRBPos()
+        {
+            Debug.Log($"RB Pos: {_rigidbody.position.ToString()} | Latest State's pos: {((RigidbodyState)LatestServerState).position.ToString()} | Transform.pos: {transform.position.ToString()}");
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace ClientSidePrediction.RB
@@ -28,20 +27,12 @@ namespace ClientSidePrediction.RB
 
         public override void SetState(RigidbodyState state)
         {
-            if(testLog)
-                Debug.Log($"RBPos before setting state: {_rigidbody.position.ToString()} | trans: {transform.position.ToString()} | New pos: <b>{state.position.ToString()}</b>");
-            
             transform.position = state.position;
             transform.rotation = state.rotation;
             _rigidbody.velocity = state.velocity;
             _rigidbody.angularVelocity = state.angularVelocity;
-        
-            if(testLog)
-                Debug.Log($"AFTER setting state: {_rigidbody.position.ToString()} | trans: {transform.position.ToString()}");
         }
 
-        public bool testLog = false;
-        
         public override void ProcessInput(RigidbodyInput input)
         {
             MoveToScene(_mainScene);
@@ -77,24 +68,6 @@ namespace ClientSidePrediction.RB
         void MoveToScene(Scene scene)
         {
             SceneManager.MoveGameObjectToScene(gameObject, scene);
-        }
-        
-        [ContextMenu("LogState")]
-        void LogRBState()
-        {
-            LogState();
-        }
-
-        [ContextMenu("LongInputQueue")]
-        void LogRBInput()
-        {
-            LogInputQueue();
-        }
-        
-        [ContextMenu("Log RB Pos")]
-        void LogRBPos()
-        {
-            Debug.Log($"RB Pos: {_rigidbody.position.ToString()} | Latest State's pos: {((RigidbodyState)LatestServerState).position.ToString()} | Transform.pos: {transform.position.ToString()}");
         }
     }
 }

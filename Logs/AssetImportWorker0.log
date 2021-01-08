@@ -1195,3 +1195,34 @@ System memory in use after: 38.1 MB.
 Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 1928.
 Total: 3.187200 ms (FindLiveObjects: 0.550500 ms CreateObjectMapping: 0.068200 ms MarkObjects: 2.533800 ms  DeleteObjects: 0.033300 ms)
 
+========================================================================
+Received Prepare
+Reloading mono domain
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Unity/2020.1.17f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.002001 seconds.
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 47.85 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  2.408 seconds
+Registering precompiled user dll's ...
+Registered in 0.105212 seconds.
+Platform modules already initialized, skipping
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 1.14 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  3.123 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.24 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 10 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 38.0 MB.
+System memory in use after: 38.1 MB.
+
+Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 1932.
+Total: 5.299300 ms (FindLiveObjects: 0.585400 ms CreateObjectMapping: 0.078900 ms MarkObjects: 4.541700 ms  DeleteObjects: 0.091300 ms)
+

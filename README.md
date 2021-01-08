@@ -10,6 +10,11 @@ My goal is to develop an easy-to-use, garbage free framework to streamline the i
 ## How to use
 
 The developer needs to fulfill 5 steps to implement prediction:
+* [State](#1-implement-state)
+* [Input](#2-implement-input)
+* [Messenger](#3-implement-the-messenger)
+* [Client](#4-implement-the-client)
+* [Prediction](#5-implement-the-prediction)
 
 ### 1) Implement _state_
 

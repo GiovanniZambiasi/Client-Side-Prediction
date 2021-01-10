@@ -15,7 +15,7 @@ Client-side prediction is a way to hide the issues of a bad internet connection.
 
 ### CharacterController
 
-The [CharacterController](https://docs.unity3d.com/Manual/class-CharacterController.html) example features a simple controller that moves and has gravity applied, though it can be extended quite easily. I recorded a demo where I simulated 150ms of lag using [clumsy](https://jagt.github.io/clumsy/), and then applied a packet loss rate of 2%. Here's the [Video](https://youtu.be/EVwhoD6A6J0):<br>
+The [CharacterController](https://docs.unity3d.com/Manual/class-CharacterController.html) example features a simple controller that moves and has gravity applied. It can be extended quite easily though. I recorded a demo where I simulated 150ms of lag using [clumsy](https://jagt.github.io/clumsy/), and then applied a packet loss rate of 2%. Here's the [Video](https://youtu.be/EVwhoD6A6J0):<br>
 [![CC_Example](https://i.ytimg.com/an_webp/EVwhoD6A6J0/mqdefault_6s.webp?du=3000&sqp=CPKH7P8F&rs=AOn4CLBZhb3JqB-IPhtUpSjqLKTwffL2jg)](https://youtu.be/EVwhoD6A6J0)
 <br>
 Note that the demo doesn't include any kind of entity interpolation, so the server's client just flickers in the client's screen when packet loss is enabled. The client's cube however is fully predictive.

@@ -1,33 +1,38 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Mirror.Examples.NetworkRoom
 {
     [AddComponentMenu("")]
     public class NetworkRoomPlayerExt : NetworkRoomPlayer
     {
-        static readonly ILogger logger = LogFactory.GetLogger(typeof(NetworkRoomPlayerExt));
-
         public override void OnStartClient()
         {
-            if (logger.LogEnabled()) logger.LogFormat(LogType.Log, "OnStartClient {0}", SceneManager.GetActiveScene().path);
-
-            base.OnStartClient();
+            //Debug.Log($"OnStartClient {gameObject}");
         }
 
         public override void OnClientEnterRoom()
         {
-            if (logger.LogEnabled()) logger.LogFormat(LogType.Log, "OnClientEnterRoom {0}", SceneManager.GetActiveScene().path);
+            //Debug.Log($"OnClientEnterRoom {SceneManager.GetActiveScene().path}");
         }
 
         public override void OnClientExitRoom()
         {
-            if (logger.LogEnabled()) logger.LogFormat(LogType.Log, "OnClientExitRoom {0}", SceneManager.GetActiveScene().path);
+            //Debug.Log($"OnClientExitRoom {SceneManager.GetActiveScene().path}");
         }
 
-        public override void ReadyStateChanged(bool _, bool newReadyState)
+        public override void IndexChanged(int oldIndex, int newIndex)
         {
-            if (logger.LogEnabled()) logger.LogFormat(LogType.Log, "ReadyStateChanged {0}", newReadyState);
+            //Debug.Log($"IndexChanged {newIndex}");
+        }
+
+        public override void ReadyStateChanged(bool oldReadyState, bool newReadyState)
+        {
+            //Debug.Log($"ReadyStateChanged {newReadyState}");
+        }
+
+        public override void OnGUI()
+        {
+            base.OnGUI();
         }
     }
 }

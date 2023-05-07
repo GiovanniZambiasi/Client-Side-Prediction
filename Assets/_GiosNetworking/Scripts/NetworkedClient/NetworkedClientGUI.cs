@@ -24,7 +24,7 @@ namespace ClientSidePrediction
             _client = _networkedClient.GetComponent<INetworkedClient>();
             _clientIdentity = _networkedClient.GetComponent<NetworkIdentity>();
             
-            _targetFPS = NetworkManager.singleton.serverTickRate;
+            _targetFPS = NetworkServer.tickRate;
         }
 
         void OnDestroy()
@@ -35,7 +35,7 @@ namespace ClientSidePrediction
 
         void OnGUI()
         {
-            if (!_clientIdentity.isClient || !_clientIdentity.hasAuthority)
+            if (!_clientIdentity.isClient || !_clientIdentity.isOwned)
                 return;
 
             if (_camera == null)
@@ -98,7 +98,7 @@ namespace ClientSidePrediction
         {
             GUILayout.Label("Stats");
             GUILayout.Label($"Current Tick: {_client.CurrentTick.ToString()}");
-            GUILayout.Label($"Delta Time: {(1f / NetworkManager.singleton.serverTickRate).ToString()}");
+            GUILayout.Label($"Delta Time: {(1f / NetworkServer.tickRate).ToString()}");
             GUILayout.Label($"Rtt: {NetworkTime.rtt.ToString()}");
         }
 

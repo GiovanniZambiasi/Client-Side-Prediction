@@ -3,25 +3,40 @@ using Mirror;
 using Mirror.Discovery;
 
 /*
-	Discovery Guide: https://mirror-networking.com/docs/Guides/NetworkDiscovery.html
-    Documentation: https://mirror-networking.com/docs/Components/NetworkDiscovery.html
+    Documentation: https://mirror-networking.gitbook.io/docs/components/network-discovery
     API Reference: https://mirror-networking.com/docs/api/Mirror.Discovery.NetworkDiscovery.html
 */
 
-public class DiscoveryRequest : MessageBase
+public struct DiscoveryRequest : NetworkMessage
 {
-    // Add properties for whatever information you want sent by clients
-    // in their broadcast messages that servers will consume.
+    // Add public fields (not properties) for whatever information you want
+    // sent by clients in their broadcast messages that servers will use.
 }
 
-public class DiscoveryResponse : MessageBase
+public struct DiscoveryResponse : NetworkMessage
 {
-    // Add properties for whatever information you want the server to return to
-    // clients for them to display or consume for establishing a connection.
+    // Add public fields (not properties) for whatever information you want the server
+    // to return to clients for them to display or use for establishing a connection.
 }
 
 public class #SCRIPTNAME# : NetworkDiscoveryBase<DiscoveryRequest, DiscoveryResponse>
 {
+    #region Unity Callbacks
+
+#if UNITY_EDITOR
+    public override void OnValidate()
+    {
+        base.OnValidate();
+    }
+#endif
+
+    public override void Start()
+    {
+        base.Start();
+    }
+
+    #endregion
+
     #region Server
 
     /// <summary>
@@ -31,7 +46,7 @@ public class #SCRIPTNAME# : NetworkDiscoveryBase<DiscoveryRequest, DiscoveryResp
     /// Override if you wish to ignore server requests based on
     /// custom criteria such as language, full server game mode or difficulty
     /// </remarks>
-    /// <param name="request">Request comming from client</param>
+    /// <param name="request">Request coming from client</param>
     /// <param name="endpoint">Address of the client that sent the request</param>
     protected override void ProcessClientRequest(DiscoveryRequest request, IPEndPoint endpoint)
     {
@@ -45,7 +60,7 @@ public class #SCRIPTNAME# : NetworkDiscoveryBase<DiscoveryRequest, DiscoveryResp
     /// Override if you wish to provide more information to the clients
     /// such as the name of the host player
     /// </remarks>
-    /// <param name="request">Request comming from client</param>
+    /// <param name="request">Request coming from client</param>
     /// <param name="endpoint">Address of the client that sent the request</param>
     /// <returns>A message containing information about this server</returns>
     protected override DiscoveryResponse ProcessRequest(DiscoveryRequest request, IPEndPoint endpoint) 

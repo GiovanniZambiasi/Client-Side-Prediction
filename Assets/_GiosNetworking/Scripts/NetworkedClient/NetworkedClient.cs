@@ -39,7 +39,7 @@ namespace ClientSidePrediction
                 _messenger.OnInputReceived += HandleInputReceived;
             }
             
-            _minTimeBetweenUpdates = 1f / NetworkManager.singleton.serverTickRate;
+            _minTimeBetweenUpdates = 1f / NetworkServer.tickRate;
         }
 
         void Update()
@@ -68,7 +68,7 @@ namespace ClientSidePrediction
         
         void HandleTick()
         {
-            if (_identity.isClient && _identity.hasAuthority)
+            if (_identity.isClient && _identity.isOwned)
                 _prediction.HandleTick(_timeSinceLastTick, _currentTick, _messenger.LatestServerState);    // Client-side prediction
             else if (!_identity.isServer)
                 HandleOtherPlayerState(_messenger.LatestServerState);                                       // Entity interpolation *TODO

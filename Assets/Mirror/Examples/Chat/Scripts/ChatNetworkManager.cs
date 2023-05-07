@@ -5,44 +5,42 @@ namespace Mirror.Examples.Chat
     [AddComponentMenu("")]
     public class ChatNetworkManager : NetworkManager
     {
-        public string PlayerName { get; set; }
+        public static new ChatNetworkManager singleton { get; private set; }
 
+        /// <summary>
+        /// Runs on both Server and Client
+        /// Networking is NOT initialized when this fires
+        /// </summary>
+        public override void Awake()
+        {
+            base.Awake();
+            singleton = this;
+        }
+
+        // Called by UI element NetworkAddressInput.OnValueChanged
         public void SetHostname(string hostname)
         {
             networkAddress = hostname;
         }
 
-        public ChatWindow chatWindow;
-
-        public class CreatePlayerMessage : MessageBase
+        public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
-            public string name;
+            // remove player name from the HashSet
+            if (conn.authenticationData != null)
+                ChatAuthenticator.playerNames.Remove((string)conn.authenticationData);
+
+            // remove connection from Dictionary of conn > names
+            ChatUI.connNames.Remove(conn);
+
+            base.OnServerDisconnect(conn);
         }
 
-        public override void OnStartServer()
+        public override void OnClientDisconnect()
         {
-            base.OnStartServer();
-            NetworkServer.RegisterHandler<CreatePlayerMessage>(OnCreatePlayer);
-        }
-
-        public override void OnClientConnect(NetworkConnection conn)
-        {
-            base.OnClientConnect(conn);
-
-            // tell the server to create a player with this name
-            conn.Send(new CreatePlayerMessage { name = PlayerName });
-        }
-
-        void OnCreatePlayer(NetworkConnection connection, CreatePlayerMessage createPlayerMessage)
-        {
-            // create a gameobject using the name supplied by client
-            GameObject playergo = Instantiate(playerPrefab);
-            playergo.GetComponent<Player>().playerName = createPlayerMessage.name;
-
-            // set it as the player
-            NetworkServer.AddPlayerForConnection(connection, playergo);
-
-            chatWindow.gameObject.SetActive(true);
+            base.OnClientDisconnect();
+            LoginUI.instance.gameObject.SetActive(true);
+            LoginUI.instance.usernameInput.text = "";
+            LoginUI.instance.usernameInput.ActivateInputField();
         }
     }
 }

@@ -2,25 +2,20 @@ using UnityEngine;
 
 namespace Mirror.Examples.NetworkRoom
 {
-    public class Spawner : NetworkBehaviour
+    internal class Spawner
     {
-        public NetworkIdentity prizePrefab;
-
-        public override void OnStartServer()
+        [ServerCallback]
+        internal static void InitialSpawn()
         {
             for (int i = 0; i < 10; i++)
-                SpawnPrize();
+                SpawnReward();
         }
 
-        public void SpawnPrize()
+        [ServerCallback]
+        internal static void SpawnReward()
         {
             Vector3 spawnPosition = new Vector3(Random.Range(-19, 20), 1, Random.Range(-19, 20));
-
-            GameObject newPrize = Instantiate(prizePrefab.gameObject, spawnPosition, Quaternion.identity);
-            Reward reward = newPrize.gameObject.GetComponent<Reward>();
-            reward.spawner = this;
-
-            NetworkServer.Spawn(newPrize);
+            NetworkServer.Spawn(Object.Instantiate(NetworkRoomManagerExt.singleton.rewardPrefab, spawnPosition, Quaternion.identity));
         }
     }
 }

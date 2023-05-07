@@ -21,13 +21,13 @@ namespace ClientSidePrediction.RB
             CmdSendInput(input);
         }
 
-        [ClientRpc(channel = Channels.DefaultUnreliable)]
+        [ClientRpc(channel = Channels.Unreliable)]
         void RpcSendState(RigidbodyState state)
         {
             _latestServerState = state;
         }
         
-        [Command(channel = Channels.DefaultUnreliable)]
+        [Command(channel = Channels.Unreliable)]
         void CmdSendInput(RigidbodyInput state)
         {
             OnInputReceived?.Invoke(state);
